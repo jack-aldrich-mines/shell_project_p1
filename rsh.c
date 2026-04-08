@@ -11,6 +11,10 @@ extern char **environ;
 
 char *allowed[N] = {"cp","touch","mkdir","ls","pwd","cat","grep","chmod","diff","cd","exit","help"};
 
+char *argv[] = {"echo", "Hello from the spawned process!", NULL};
+pid_t pid;
+int status;
+
 int isAllowed(const char*cmd) {
 	// TODO
 	// return 1 if cmd is one of the allowed commands
@@ -40,7 +44,23 @@ int main() {
 	// Add code to spawn processes for the first 9 commands
 	// And add code to execute cd, exit, help commands
 	// Use the example provided in myspawn.c
+	
+	posix_spawnattr_t attr;
+	posix_spawnattr_init(&attr);
 
+	// check isAllowed()
+
+	if (posix_spawnp(&pid, "echo", NULL, &attr, argv, environ) != 0) {
+        	perror("spawn failed");
+        	exit(EXIT_FAILURE);
+    	}
+
+	if (waitpid(pid, &status, 0) == -1) {
+		perror("waitpid failed");
+		exit(EXIT_FAILURE);
+	}
+
+	posix_spawnattr_destroy(&attr);
     }
     return 0;
 }
