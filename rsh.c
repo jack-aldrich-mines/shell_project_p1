@@ -45,6 +45,8 @@ int main() {
 	// And add code to execute cd, exit, help commands
 	// Use the example provided in myspawn.c
 	
+	if (strcmp(line,"exit")==0) return 0;
+	
 	posix_spawnattr_t attr;
 	posix_spawnattr_init(&attr);
 
