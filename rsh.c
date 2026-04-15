@@ -69,10 +69,17 @@ int main() {
 
 	// different cmds
 	if (strcmp(argv[0], "cd")==0) {
-		if (sizeof(argv)/sizeof(argv[0]) > 2) {
-			printf("-rsh: cd: too many arguments");
+		if (argc == 1) {
+			printf("-rsh: cd: not enough arguments\n");
 			continue;
 		}
+		
+		if (argc > 2) {
+			printf("-rsh: cd: too many arguments\n");
+			continue;
+		}
+
+		chdir(argv[1]);
 	}
 	else if (strcmp(argv[0], "exit")==0) return 0;
 	else if (strcmp(argv[0], "help")==0) {
@@ -97,12 +104,12 @@ int main() {
 		// spawn
 		if (posix_spawnp(&pid, argv[0], NULL, &attr, argv, environ) != 0) {
 			perror("spawn failed");
-			exit(EXIT_FAILURE);
+			posix_spawnattr_destroy(&attr);
+			continue;
 		}
 		// wait to terminate
 		if (waitpid(pid, &status, 0) == -1) {
 			perror("waitpid failed");
-			exit(EXIT_FAILURE);
 		}
 		// destroy spawned process
 		posix_spawnattr_destroy(&attr);
