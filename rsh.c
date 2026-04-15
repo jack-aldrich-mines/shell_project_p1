@@ -40,7 +40,7 @@ int main() {
 
 	fprintf(stderr,"rsh>");
 
-	if (fgets(line,256,stdin)==NULL) continue;
+	if (fgets(line,256,stdin)==NULL) break;
 
 	if (strcmp(line,"\n")==0) continue;
 
@@ -70,7 +70,6 @@ int main() {
 	// different cmds
 	if (strcmp(argv[0], "cd")==0) {
 		if (argc == 1) {
-			printf("-rsh: cd: not enough arguments\n");
 			continue;
 		}
 		
